@@ -114,7 +114,27 @@ void excluir(NO *raiz, int cod_produto)
 
 void consultar(NO *raiz, int cod_produto)
 {
-    printf("Testee Consultar: %d \n", cod_produto);
+    if(raiz == NULL) {
+        printf("Elemento nao existe na arvore");
+    } else {
+        if(raiz->prod.cod_produto == cod_produto) {
+            listarConsulta(raiz);
+        } else if(raiz->prod.cod_produto < cod_produto) {
+            consultar(raiz->esquerda, cod_produto);
+        } else {
+            consultar(raiz->direita, cod_produto);
+        }
+
+        listarConsulta(raiz);
+    }
+}
+
+void listarConsulta(NO *noConsultado) {
+    struct tm data = noConsultado->prod.data_validade;
+    printf("%d \n", noConsultado->prod.cod_produto);
+    printf("%s \n", noConsultado->prod.numero_de_serie);
+    printf("Data e hora inseridas: %02d/%02d/%04d \n",
+            data.tm_mday, data.tm_mon + 1, data.tm_year + 1900);
 }
 
 void listarArvore(NO *raiz)
