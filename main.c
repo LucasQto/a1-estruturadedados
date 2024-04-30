@@ -95,15 +95,34 @@ void inserir(arvore *arv, struct Produto novoProduto)
 
 void alterar(NO *raiz, int cod_produto)
 {
-    printf("Testee Alterar: %d \n", cod_produto);
-    if(raiz != NULL && cod_produto != raiz->prod.cod_produto) {
-        alterar(raiz->esquerda, cod_produto);
-        alterar(raiz->direita, cod_produto);
-    } else if(cod_produto == raiz->prod.cod_produto) {
-        raiz->prod.cod_produto = "Oiii";
-        printf("Codigo do produto atualizado");
+    if(raiz != NULL)  {
+        printf("Nenhum produto com esse código foi encontrado");
     } else {
-        printf("Não existe esse código");
+        if(raiz->prod.cod_produto == cod_produto) {
+            int novo_cod_produto;
+            char novo_numero_de_serie[50];
+            struct tm nova_data;
+            int dia,mes,ano;
+            listarConsulta(raiz);
+
+            printf("------------Inserir novos dados------------");
+            printf("Digite o codigo do produto: \n");
+            scanf("%d", &cod_produto);
+            printf("Digite o numero de serie do produto: \n");
+            scanf("%s", novo_numero_de_serie);
+            printf("Digite uma data(dd/mm/yyyy): \n");
+            scanf("%d/%d/%d", &dia, &mes, &ano);
+
+            nova_data.tm_mday = dia;
+            nova_data.tm_mon = mes - 1;
+            nova_data.tm_year = ano - 1900;
+
+            raiz->prod.cod_produto = novo_cod_produto;
+            strcpy(raiz->prod.numero_de_serie, novo_numero_de_serie);
+            raiz->prod.data_validade = nova_data;
+        } else if(raiz->prod.cod_produto < cod_produto) {
+            alterar(raiz.)
+        }
     }
 }
 
@@ -124,12 +143,11 @@ void consultar(NO *raiz, int cod_produto)
         } else {
             consultar(raiz->direita, cod_produto);
         }
-
-        listarConsulta(raiz);
     }
 }
 
 void listarConsulta(NO *noConsultado) {
+    printf("Dados do produto: \n");
     struct tm data = noConsultado->prod.data_validade;
     printf("%d \n", noConsultado->prod.cod_produto);
     printf("%s \n", noConsultado->prod.numero_de_serie);
