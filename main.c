@@ -95,7 +95,7 @@ void inserir(arvore *arv, struct Produto novoProduto)
 
 void alterar(NO *raiz, int cod_produto)
 {
-    if(raiz != NULL)  {
+    if(raiz == NULL)  {
         printf("Nenhum produto com esse código foi encontrado");
     } else {
         if(raiz->prod.cod_produto == cod_produto) {
@@ -105,7 +105,7 @@ void alterar(NO *raiz, int cod_produto)
             int dia,mes,ano;
             listarConsulta(raiz);
 
-            printf("------------Inserir novos dados------------");
+            printf("------------Inserir novos dados------------\n");
             printf("Digite o codigo do produto: \n");
             scanf("%d", &cod_produto);
             printf("Digite o numero de serie do produto: \n");
@@ -120,8 +120,10 @@ void alterar(NO *raiz, int cod_produto)
             raiz->prod.cod_produto = novo_cod_produto;
             strcpy(raiz->prod.numero_de_serie, novo_numero_de_serie);
             raiz->prod.data_validade = nova_data;
-        } else if(raiz->prod.cod_produto < cod_produto) {
-            alterar(raiz.)
+        } else if(compararDatas(raiz->prod.data_validade, raiz->direita->prod.data_validade) == -1) {
+            alterar(raiz->esquerda, cod_produto);
+        } else if(compararDatas(raiz->prod.data_validade, raiz->esquerda->prod.data_validade) == 1) {
+            alterar(raiz->direita, cod_produto);
         }
     }
 }
@@ -186,10 +188,6 @@ int compareStrings(char cod1[50], char cod2[50]) {
     respostaComp = strcmp(cod1, cod2);
 
     return respostaComp;
-}
-
-void opcoes()
-{
 }
 
 int main()
