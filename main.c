@@ -121,23 +121,6 @@ void alterar(Heap *h, int cod_produto) {
     }
 }
 
-void imprimirHeap(Heap *h) {
-    printf("Estrutura do Heap diags:\n");
-    for (int i = 0; i < h->tamanho; i++) {
-        struct Produto p = h->produtos[i];
-        printf("Índice: %d, Código: %d, Série: %s, Data: %02d/%02d/%04d\n",
-               i, p.cod_produto, p.numero_de_serie,
-               p.data_validade.tm_mday, p.data_validade.tm_mon + 1,
-               p.data_validade.tm_year + 1900);
-    }
-}
-
-void construirHeap(Heap *h) {
-    for(int i = h->tamanho / 2; i >= 0; i--) {
-        organizacaoBaixo(h, i);
-    }
-}
-
 void excluirPorCodigo(Heap *h, int cod_produto) {
   int encontrado = 0;
   int indexParaExcluir = -1;
@@ -148,7 +131,7 @@ void excluirPorCodigo(Heap *h, int cod_produto) {
   for (int i = 0; i < h->tamanho; i++) {
     if (h->produtos[i].cod_produto == cod_produto) {
       if (indexParaExcluir == -1 || 
-          compararDatas(h->produtos[i].data_validade, h->produtos[indexParaExcluir].data_validade) < 0) {
+          compararDatas(h->produtos[i].data_validade, h->produtos[indexParaExcluir].data_validade) > 0) {
         indexParaExcluir = i; // Atualiza o índice para o produto com menor data de validade
         encontrado++;
       }
@@ -168,12 +151,12 @@ void excluirPorCodigo(Heap *h, int cod_produto) {
     h->tamanho--;
 
     // Reorganizar o heap após a exclusão para manter a propriedade do heap
-    //organizacaoCima(h, indexParaExcluir);
-    //organizacaoBaixo(h, 0);
-    construirHeap(h);
-
-    printf("\nEstrutura do Heap após exclusão:\n");
-    imprimirHeap(h);
+    for (int i = 0; i < h->tamanho; i++) {
+        if (h->produtos[i].cod_produto == cod_produto) {
+            organizacaoBaixo(h, i);
+            organizacaoCima(h, i);
+        }
+    }
   } else {
     printf("Nenhum produto com o código %d foi encontrado no heap.\n", cod_produto);
   }
@@ -240,7 +223,7 @@ int main() {
         printf("4 - Consultar produto\n");
         printf("5 - Listar produtos\n");
         printf("9 - Sair\n");
-
+        printf("Digite a operação que deseja fazer de acordo com a numeração das opções: ");
         scanf("%d", &opcao);
 
         switch (opcao) {
